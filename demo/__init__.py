@@ -10,11 +10,10 @@ COLOR_PALLETE = {
     'sad': '#00B0F0',
     'surprise': '#FC990A',
     'fear': '#b868f9',
-    'neutral': '#b1b0b0',
+    'neutral': '#8B8B8B',
     'angry': '#FF4C21'
 }
 sentiment_classifier = DeployedClassifier()
-
 
 def get_db_connection(db_directory = 'demo/database.db'):
     '''Connect to the database
@@ -44,7 +43,14 @@ def index():
 @app.route('/posts/<int:post_id>')
 def post(post_id):
     post = get_post(post_id)
-    return render_template('post.html', post=post)
+    y_pred_all = [(label, post[label]) for label in LABEL_DICT.keys()]
+    y_pred_all.sort(key = lambda x: x[1], reverse=True)
+    emotions = {'Task' : 'Percentage'}
+    emotions.update({pred: proba for pred, proba in y_pred_all})
+    emotions_scipt = '｜'.join([f'{pred}({round(100*proba, 1)}%)' for pred, proba in y_pred_all][:3])
+    print(emotions_scipt)
+    colors_in_order = [COLOR_PALLETE[pred] for pred, _ in y_pred_all]
+    return render_template('post.html', post=post, emotions=emotions, colors_in_order=colors_in_order, emotions_scipt=emotions_scipt)
 
 @app.route('/posts/new', methods=('GET', 'POST'))
 def new():
@@ -62,7 +68,7 @@ def new():
             elif not content:
                 flash('Content can not be empty')
             else:
-                y_pred_all, y_pred = sentiment_classifier.pred(content)
+                y_pred_all, _ = sentiment_classifier.pred(content)
                 conn = get_db_connection()
                 conn.execute("INSERT INTO posts (title, content, fear, neutral, sad, surprise, angry, happy) VALUES (?, ?, ?, ?, ?, ?, ?, ?);", 
                             (title, content) + tuple((proba for pred, proba in y_pred_all)))
@@ -73,7 +79,7 @@ def new():
             if not content:
                 flash('Content can not be empty')
             else:
-                y_pred_all, y_pred = sentiment_classifier.pred(content)
+                y_pred_all, _ = sentiment_classifier.pred(content)
                 y_pred_all.sort(key = lambda x: x[1], reverse=True)
                 emotions = {'Task' : 'Percentage'}
                 emotions.update({pred: proba for pred, proba in y_pred_all})
@@ -97,10 +103,12 @@ def edit(id):
         if not title:
             flash('Title is required!')
         else:
+            y_pred_all, _ = sentiment_classifier.pred(content)
             conn = get_db_connection()
-            conn.execute('UPDATE posts SET title = ?, content = ?'
+            conn.execute('UPDATE posts SET title = ?, content = ?, fear = ?, neutral = ?, sad = ?, surprise = ?, angry = ?, happy = ?'
                          ' WHERE id = ?',
-                         (title, content, id))
+                         (title, content) + tuple((proba for _, proba in y_pred_all)) + (id, )
+                         )
             conn.commit()
             conn.close()
             return redirect(url_for('index'))
