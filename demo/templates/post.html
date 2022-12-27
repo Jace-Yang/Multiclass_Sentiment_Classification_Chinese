@@ -26,21 +26,13 @@
                     {% endfor %}
                 {% endif %}
             ]);
-            // var colors_maps = JSON.parse("{{ colors_in_order }}") ;
-            // colors_maps;
             
             var options = {
                 title: 'Your emotions in the diary are: ' + '{{emotions_scipt}}',
                 pieSliceText: 'label',
-                // is3D: true,
                 sliceVisibilityThreshold: .01,
                 pieHole: 0.4,
                 colors: {{colors_in_order|safe}},
-                // slices: {  
-                // 1: {offset: 0.2},
-                // 2: {offset: 0.2},
-                // 3: {offset: 0.2}
-                // }
             };
 
             var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
