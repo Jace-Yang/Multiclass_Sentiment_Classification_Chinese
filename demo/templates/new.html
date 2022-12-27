@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+<p> </p>
+<h1>{% block title %} New a diary {% endblock %}</h1>
+
+
+
+<form action="{{ url_for('new') }}" method="post">
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" name="title" placeholder="Title of the diary" class="form-control"
+            value="{{ request.form['title'] }}"></input>
+    </div>
+
+    <div class="form-group">
+        <label for="content">Content</label>
+        <textarea name="content" placeholder="What are you thinking right now?"
+            class="form-control">{{ request.form['content'] }}</textarea>
+    </div>
+
+    <div class="form-group">
+        <input type ="submit" class="btn btn-secondary" name="action" value="Guess Emotion">
+    </div>
+
+    {% if emotions %}
+        <meta charset="UTF-8">
+        <title>Show Data on Google Pie Chart using Python Flask</title>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load("current", {packages:["corechart"]});
+            google.charts.setOnLoadCallback(drawChart);
+            function drawChart() {
+                var emotions = google.visualization.arrayToDataTable([
+                    {% if emotions %}
+                        {% for key, value in emotions.items() %}
+                            {% if value is string %}
+                                ['{{ key }}', '{{ value }}'],
+                            {% else %}
+                                ['{{ key }}', {{ value }}],
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                ]);
+                // var colors_maps = JSON.parse("{{ colors_in_order }}") ;
+                // colors_maps;
+                
+                var options = {
+                    title: 'Your emotions in the diary are: ' + '{{emotions_scipt}}',
+                    pieSliceText: 'label',
+                    // is3D: true,
+                    sliceVisibilityThreshold: .01,
+                    pieHole: 0.4,
+                    colors: {{colors_in_order|safe}},
+                    // slices: {  
+                    // 1: {offset: 0.2},
+                    // 2: {offset: 0.2},
+                    // 3: {offset: 0.2}
+                    // }
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+                chart.draw(emotions, options);
+            }
+        </script>
+
+        <div style="margin: 10px 0 0 10px;width: 1000px">            
+            <div id="piechart_3d" style="width: 750px; height: 450px;"></div>
+        </div>
+    {% endif %}
+
+    <div class="form-group">
+        <input type ="submit" class="btn btn-primary"  name="action" value="Submit">
+    </div>
+
+    
+</form>
+
+
+{% endblock %}

@@ -1,0 +1,14 @@
+DROP TABLE IF EXISTS posts;
+
+CREATE TABLE posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    fear FLOAT NOT NULL,
+    neutral FLOAT NOT NULL,
+    sad FLOAT NOT NULL,
+    surprise FLOAT NOT NULL,
+    angry FLOAT NOT NULL,
+    happy FLOAT NOT NULL
+);

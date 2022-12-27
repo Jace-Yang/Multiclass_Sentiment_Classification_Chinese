@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p> </p>
+<h1>{% block title %} Jace's emotion summary {% endblock %}</h1>
+
+{% if emotions %}
+    <meta charset="UTF-8">
+    <title>Show Data on Google Pie Chart using Python Flask</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load("current", {packages:["corechart"]});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var emotions = google.visualization.arrayToDataTable([
+                {% if emotions %}
+                    {% for key, value in emotions.items() %}
+                        {% if value is string %}
+                            ['{{ key }}', '{{ value }}'],
+                        {% else %}
+                            ['{{ key }}', {{ value }}],
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            ]);
+            // var colors_maps = JSON.parse("{{ colors_in_order }}") ;
+            // colors_maps;
+            
+            var options = {
+                title: 'Your emotions of all diary are: ' + '{{emotions_scipt}}',
+                pieSliceText: 'label',
+                // is3D: true,
+                sliceVisibilityThreshold: .01,
+                pieHole: 0.4,
+                colors: {{colors_in_order|safe}},
+                // slices: {  
+                // 1: {offset: 0.2},
+                // 2: {offset: 0.2},
+                // 3: {offset: 0.2}
+                // }
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+            chart.draw(emotions, options);
+        }
+    </script>
+
+    <div style="margin: 10px 0 0 10px;width: 1000px">            
+        <div id="piechart_3d" style="width: 750px; height: 450px;"></div>
+    </div>
+{% endif %}
+
+{% endblock %}
