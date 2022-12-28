@@ -8,7 +8,7 @@ from tqdm.notebook import tqdm
 import pandas as pd
 
 class SentimentClassifier(nn.Module):
-    def __init__(self, num_classes, model_name, pretrain_path, hidden_size):
+    def __init__(self, num_classes, pretrain_path, hidden_size):
         '''
         pretrain_path: local or hugging-face path, e.g '/roberta-wwm-ext pretrain/'
         '''
@@ -32,9 +32,9 @@ class StackedClassifier(nn.Module):
         if 'Stacked Model' in models.keys():
             del models['Stacked Model']
         self.models = models
-        self.stack_weights = torch.tensor([[stack_weights[model_name] for model_name, model in self.models.items()]]).squeeze().to(device)
+        self.stack_weights = torch.tensor([[stack_weights[model_name] for model_name, _ in self.models.items()]]).squeeze().to(device)
     def forward(self, x, token_type_ids, attention_mask):
-        predicts = [torch.softmax(model(x, token_type_ids, attention_mask), dim=1).unsqueeze(2) for model_name, model in self.models.items()]
+        predicts = [torch.softmax(model(x, token_type_ids, attention_mask), dim=1).unsqueeze(2) for _, model in self.models.items()]
         x = (torch.cat(predicts, axis=2) * self.stack_weights).sum(axis=2)
         return x
 
