@@ -1,4 +1,5 @@
-# Multiclass_Sentiment_Classification_Chinese
+# Multiclass Sentiment Classification on Chinese using BERT-WWM
+
 Final Project of Columbia COMS 4995 Applied Deep Learning
 
 ## Quick Demo
@@ -10,6 +11,7 @@ python3
 >>> clf.pred('阿根廷终于赢了世界杯')
 ([('fear', 0.0024164714850485325), ('neutral', 0.0563773512840271), ('sad', 0.037695735692977905), ('surprise', 0.05237787961959839), ('angry', 0.020596427842974663), ('happy', 0.8305360674858093)], 'happy')
 ```
+
 ## Directory Introduction
 
 - `data` contains original input
@@ -28,9 +30,9 @@ python3
 
 1. Train and cache the models: run `1_Training.ipynb`
 
-    - It will cache the training logs into `result/training/`, which is uploaded to this repository
+   - It will cache the training logs into `result/training/`, which is uploaded to this repository
 
-    - It will save the best models in `result/model/`, which is ignored when upload this repository. But you can download it directly from this [Google Drive folder](https://drive.google.com/drive/folders/1impSyTM0-kXY9bRby7BUYV2kqbnwnlEB?usp=share_link).
+   - It will save the best models in `result/model/`, which is ignored when upload this repository. But you can download it directly from this [Google Drive folder](https://drive.google.com/drive/folders/1impSyTM0-kXY9bRby7BUYV2kqbnwnlEB?usp=share_link).
 
 1. Evaluate the models and obtain stacked model: run `2_Evaluating.ipynb`
 
