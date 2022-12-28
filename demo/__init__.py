@@ -86,8 +86,7 @@ def new():
                 emotions_scipt = '｜'.join([f'{pred}({round(100*proba, 1)}%)' for pred, proba in y_pred_all][:3])
                 print(emotions_scipt)
                 colors_in_order = [COLOR_PALLETE[pred] for pred, _ in y_pred_all]
-                # emotions = [f'{pred} ({round(100*proba, 3)}%)' for pred, proba in y_pred_all]
-                
+                print(emotions_scipt)
     return render_template('new.html', emotions=emotions, colors_in_order=colors_in_order, emotions_scipt=emotions_scipt)
 
 @app.route('/posts/<int:id>/edit', methods=('GET', 'POST'))

@@ -41,7 +41,6 @@ class StackedClassifier(nn.Module):
 def train(model, model_name, train_loader, test_loader, optimizer, device, n_epoch, model_saving_path):
     '''Train the model
     '''
-
     model.train()
     best_f1 = 0.0
     training_loss = []

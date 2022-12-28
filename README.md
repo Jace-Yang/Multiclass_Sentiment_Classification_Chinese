@@ -1,6 +1,15 @@
 # Multiclass_Sentiment_Classification_Chinese
 Final Project of Columbia COMS 4995 Applied Deep Learning
 
+## Quick Demo
+
+```
+python3
+>>> from demo.final_classifier import DeployedClassifier
+>>> clf = DeployedClassifier()
+>>> clf.pred('阿根廷终于赢了世界杯')
+([('fear', 0.0024164714850485325), ('neutral', 0.0563773512840271), ('sad', 0.037695735692977905), ('surprise', 0.05237787961959839), ('angry', 0.020596427842974663), ('happy', 0.8305360674858093)], 'happy')
+```
 ## Directory Introduction
 
 - `data` contains original input
